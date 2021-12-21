@@ -27,6 +27,7 @@ import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.persistence.PersistentDataType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -1607,6 +1608,13 @@ public class PSBlockListener implements Listener {
                 Player player = (Player) event.getPlayer();
 
                 if (FieldFlag.PROTECT_INVENTORIES.applies(field, player)) {
+                    if (plugin.getPermissionsManager().ecsExists) {
+                        TileState state = (TileState) location.getBlock().getState();
+                        if (state.getPersistentDataContainer().has(new NamespacedKey(plugin, "owner"), PersistentDataType.STRING)) {
+                            //means that's the shop and you are allowed to open the menu, not the block's container
+                            return;
+                        }
+                    }
                     event.setCancelled(true);
                     ChatHelper.send(player, "inventoryDeny");
                 }

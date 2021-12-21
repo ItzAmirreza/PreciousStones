@@ -45,6 +45,7 @@ public final class PermissionsManager {
     private PreciousStones plugin;
     private mcMMO mcmmo = null;
 	private WorldEditPlugin worldEdit = null;
+    public boolean ecsExists = false;
 
     /**
      *
@@ -58,6 +59,7 @@ public final class PermissionsManager {
         detectLockette();
         detectMcMMO();
         detectWorldEdit();
+        detectECS();
 
         try {
             Class.forName("net.milkbowl.vault.permission.Permission");
@@ -83,6 +85,14 @@ public final class PermissionsManager {
 
         if (plug != null) {
             mcmmo = ((mcMMO) plug);
+        }
+    }
+
+    private void detectECS() {
+        Plugin plug = plugin.getServer().getPluginManager().getPlugin("EzChestShop");
+
+        if (plug != null) {
+            ecsExists = true;
         }
     }
 

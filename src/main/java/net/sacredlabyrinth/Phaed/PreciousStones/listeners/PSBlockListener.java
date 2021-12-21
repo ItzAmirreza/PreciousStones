@@ -1609,11 +1609,13 @@ public class PSBlockListener implements Listener {
 
                 if (FieldFlag.PROTECT_INVENTORIES.applies(field, player)) {
                     if (plugin.getPermissionsManager().ecsExists) {
-                        TileState state = (TileState) location.getBlock().getState();
-                        if (state.getPersistentDataContainer().has(new NamespacedKey(plugin, "owner"), PersistentDataType.STRING)) {
-                            //means that's the shop and you are allowed to open the menu, not the block's container
-                            return;
-                        }
+			if (location.getBlock() != null) {
+				TileState state = (TileState) location.getBlock().getState();
+				if (state.getPersistentDataContainer().has(new NamespacedKey(plugin, "owner"), PersistentDataType.STRING)) {
+					//means that's the shop and you are allowed to open the menu, not the block's container
+					return;
+				}
+			}
                     }
                     event.setCancelled(true);
                     ChatHelper.send(player, "inventoryDeny");
